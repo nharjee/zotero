@@ -49,9 +49,9 @@ Zotero.Items = function () {
 				key: "O.key",
 				version: "O.version",
 				synced: "O.synced",
-				
-				createdByUserID: "createdByUserID",
-				lastModifiedByUserID: "lastModifiedByUserID",
+			
+				createdByUserID: "GI.createdByUserID",
+				lastModifiedByUserID: "GI.lastModifiedByUserID",
 				
 				firstCreator: _getFirstCreatorSQL(),
 				sortCreator: _getSortCreatorSQL(),

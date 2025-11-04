@@ -186,6 +186,14 @@ const COLUMNS = [
 		zoteroPersist: ["width", "hidden", "sortDirection"]
 	},
 	{
+		dataKey: "addedBy",
+		disabledIn: ["feeds", "feed"],
+		showInColumnPicker: true,
+		label: "zotero.items.addedBy_column",
+		flex: 1,
+		zoteroPersist: ["width", "hidden", "sortDirection"]
+	},
+	{
 		dataKey: "archive",
 		disabledIn: ["feeds", "feed"],
 		showInColumnPicker: true,

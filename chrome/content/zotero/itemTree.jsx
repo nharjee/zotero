@@ -3404,6 +3404,20 @@ var ItemTree = class ItemTree extends LibraryTree {
 		row.feed = (treeRow.ref.isFeedItem && Zotero.Feeds.get(treeRow.ref.libraryID).name) || "";
 		row.title = treeRow.ref.getDisplayTitle();
 		
+		// Get username from createdByUserID for group libraries
+		row.addedBy = '';
+		if (treeRow.ref.libraryID) {
+			try {
+				let library = Zotero.Libraries.get(treeRow.ref.libraryID);
+				if (library && library.isGroup && treeRow.ref.createdByUserID) {
+					row.addedBy = Zotero.Users.getName(treeRow.ref.createdByUserID) || '';
+				}
+			}
+			catch (e) {
+				Zotero.debug(`Error getting addedBy for item: ${e}`, 2);
+			}
+		}
+		
 		const columns = this.getColumns();
 		for (let col of columns) {
 			let key = col.dataKey;

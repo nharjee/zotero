@@ -1453,6 +1453,9 @@ var ItemTree = class ItemTree extends LibraryTree {
 			case 'feed':
 				return (row.ref.isFeedItem && Zotero.Feeds.get(row.ref.libraryID).name) || "";
 			
+			case 'addedBy':
+				return row.addedBy();
+			
 			default:
 				let extraField = this.props.getExtraField(row.ref, field);
 				if (extraField !== undefined) return extraField;
@@ -3403,20 +3406,7 @@ var ItemTree = class ItemTree extends LibraryTree {
 		row.numNotes = treeRow.numNotes() || "";
 		row.feed = (treeRow.ref.isFeedItem && Zotero.Feeds.get(treeRow.ref.libraryID).name) || "";
 		row.title = treeRow.ref.getDisplayTitle();
-		
-		// Get username from createdByUserID for group libraries
-		row.addedBy = '';
-		if (treeRow.ref.libraryID) {
-			try {
-				let library = Zotero.Libraries.get(treeRow.ref.libraryID);
-				if (library && library.isGroup && treeRow.ref.createdByUserID) {
-					row.addedBy = Zotero.Users.getName(treeRow.ref.createdByUserID) || '';
-				}
-			}
-			catch (e) {
-				Zotero.debug(`Error getting addedBy for item: ${e}`, 2);
-			}
-		}
+		row.addedBy = treeRow.addedBy();
 		
 		const columns = this.getColumns();
 		for (let col of columns) {
@@ -4139,6 +4129,21 @@ ItemTreeRow.prototype.numNotes = function() {
 		return this.ref.note !== '' ? 1 : 0;
 	}
 	return this.ref.numNotes(false, true) || 0;
+}
+
+ItemTreeRow.prototype.addedBy = function() {
+	if (this.ref.libraryID) {
+		try {
+			let library = Zotero.Libraries.get(this.ref.libraryID);
+			if (library && library.isGroup && this.ref.createdByUserID) {
+				return Zotero.Users.getName(this.ref.createdByUserID) || '';
+			}
+		}
+		catch (e) {
+			Zotero.debug(`Error getting addedBy: ${e}`, 2);
+		}
+	}
+	return '';
 }
 
 Zotero.Utilities.Internal.makeClassEventDispatcher(ItemTree);
